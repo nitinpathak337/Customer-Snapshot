@@ -2,7 +2,7 @@ Hey Guys,
 
 This is the Customer Snapshot app I have built using React, and Typescript.
 
-Website live link: [https://state-stats.onrender.com](https://customer-snapshot.onrender.com)
+Website live link: [https://customer-snapshot.onrender.com](https://customer-snapshot.onrender.com)
 
 To start the application in local:
 
