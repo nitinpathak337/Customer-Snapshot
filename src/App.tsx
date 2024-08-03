@@ -1,26 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+import CustomerList from './components/CustomerList';
+import CustomerDetails from './components/CustomerDetails';
+import { ICustomer } from './types';
 import './App.css';
 
-function App() {
+const App: React.FC = () => {
+  const [customers, setCustomers] = useState<ICustomer[]>([]); 
+  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
+
+  const selectedCustomer = customers.find(customer => customer.id === selectedCustomerId) || null;
+
+  useEffect(()=>{
+    fetchUsers();
+  },[])
+
+  const fetchUsers=async ()=>{
+    try{
+    const response = await fetch("https://dummyapi.online/api/users");//api call for fetching customers
+    const data:ICustomer[] = await response.json();
+      setCustomers(data)
+      setSelectedCustomerId(data[0]?.id);//initially selecting the zeroth index customer
+    }catch(e){
+      alert(e); // can be replaced with a snackbar error alert
+    } 
+
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-container">
+      {customers.length === 0
+        || !customers
+      ?(<h1>Loading...</h1>)//Can be replaced with a loader 
+      :
+     (<> 
+      <CustomerList
+        customers={customers}
+        selectedCustomerId={selectedCustomerId}
+        onSelectCustomer={setSelectedCustomerId}
+      />
+      <CustomerDetails customer={selectedCustomer} />
+      </>)}
     </div>
   );
-}
+};
 
 export default App;
